@@ -31,6 +31,7 @@ pipeline {
             agent{
                 docker{
                     image 'amazon/aws-cli'
+                    reuseNode true
                     args "--entrypoint=''"
                 }
             }
@@ -43,13 +44,13 @@ pipeline {
                     aws --version
                     echo "Hello S3!!" > index.html
                     #aws s3 cp index.html s3://$AMS_S3_BUCKET/index.html
-                    aws s3 sync . s3://$AMS_S3_BUCKET
+                    aws s3 sync build s3://$AMS_S3_BUCKET
 
                 '''
                 }
             }    
         }
-        
+
         stage('Tests') {
             parallel {
                 stage('Unit tests') {
